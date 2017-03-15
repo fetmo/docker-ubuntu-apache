@@ -38,7 +38,8 @@ RUN apt-get -y --force-yes install nodejs npm \
 && echo "export APACHE_RUN_USER=docker" >> /etc/apache2/envvars \
 && echo "export APACHE_RUN_GROUP=docker" >> /etc/apache2/envvars \
 && apt-get -y --force-yes install mysql-server-5.6 \
-&& rm -rf /etc/mysql/mysql.conf.d/*
+&& rm -rf /etc/mysql/mysql.conf.d/* \
+&& ln -s /usr/bin/nodejs /usr/bin/node
 
 ADD .docker/mysql/conf.d /etc/mysql/conf.d
 

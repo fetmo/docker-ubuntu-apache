@@ -24,12 +24,8 @@ RUN apt-get -y --force-yes install nodejs npm \
 && npm install -g grunt-cli \
 && adduser --disabled-password --gecos "" docker \
 && echo 'docker:docker' | chpasswd \
-&& adduser --disabled-password --gecos "" nexus \
-&& echo 'nexus:nexus' | chpasswd \
 && adduser www-data docker \
-&& adduser docker nexus \
 && adduser docker sudo \
-&& adduser nexus sudo \
 && echo "%sudo ALL = NOPASSWD: ALL" >> /etc/sudoers \
 && apt-get -y install software-properties-common \
 && apt-get update && apt-get -y install python-software-properties \
@@ -38,11 +34,18 @@ RUN apt-get -y --force-yes install nodejs npm \
 && a2enmod vhost_alias \
 && apt-get -y clean \
 && chown -Rf docker:docker /var/ \
-&& chown -Rf nexus:nexus /var/ \
 && rm -rf /var/www/html \
 && echo "export APACHE_RUN_USER=docker" >> /etc/apache2/envvars \
 && echo "export APACHE_RUN_GROUP=docker" >> /etc/apache2/envvars \
+&& apt-get -y --force-yes install mysql-server-5.6 \
+&& rm -rf /etc/mysql/mysql.conf.d/* \
 && ln -s /usr/bin/nodejs /usr/bin/node
+
+ADD .docker/mysql/conf.d /etc/mysql/conf.d
+
+RUN rm -rf /var/lib/mysql/ib_logfile* \
+&& /opt/docker/scripts/config-mysql.sh \
+&& mkdir /var/www/log
 
 EXPOSE 22 80 3000 3306
 CMD ["supervisord", "-n"]

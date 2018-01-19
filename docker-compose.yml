@@ -1,0 +1,16 @@
+version: '2'
+services:
+  elasticsearch:
+    build: .docker/images/elasticsearch
+    image: nexusnetsoft/elasticsearch
+    container_name: elasticsearch
+    restart: always
+    ports:
+      - "9300:9300"
+  mysql:
+    build: .docker/images/mysql
+    image: nxswesolowski/ubuntu-apache-mysql
+    container_name: apache-mysql
+    restart: always
+    ports:
+      - "9200:9200"

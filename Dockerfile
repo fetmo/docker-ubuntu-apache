@@ -11,7 +11,6 @@ RUN apt-get update && apt-get -y upgrade \
 && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
 ADD .docker/supervisor /etc/supervisor/conf.d
-ADD supervisord.conf /etc/supervisor/conf.d
 
 RUN apt-get -y --force-yes install apache2 \
 && mkdir -p /var/lock/apache2 /var/run/apache2 \
@@ -46,5 +45,5 @@ RUN apt-get -y --force-yes install nodejs npm \
 && echo "export APACHE_RUN_GROUP=docker" >> /etc/apache2/envvars \
 && ln -s /usr/bin/nodejs /usr/bin/node
 
-EXPOSE 22 80 3000 3306
+EXPOSE 22 80 3000
 CMD ["supervisord", "-n"]

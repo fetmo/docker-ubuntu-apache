@@ -6,7 +6,7 @@ ADD .docker/scripts /opt/docker/scripts
 RUN apt-get update && apt-get -y upgrade \
 && apt-get -y install supervisor openssh-server curl rsync vim git ant unzip sudo \
 && mkdir -p /var/run/sshd /var/log/supervisor \
-&& echo 'root:docker123' | chpasswd \
+&& echo 'root:docker' | chpasswd \
 && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
 && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 
@@ -24,7 +24,7 @@ RUN apt-get -y --force-yes install nodejs npm \
 && adduser --disabled-password --gecos "" docker \
 && echo 'docker:docker' | chpasswd \
 && adduser --disabled-password --gecos "" nexus \
-&& echo 'nexus:nexus' | chpasswd \
+&& echo 'nexus:nexus123' | chpasswd \
 && adduser www-data docker \
 && adduser docker nexus \
 && adduser nexus sudo \
@@ -39,11 +39,12 @@ RUN apt-get -y --force-yes install nodejs npm \
 && a2enmod vhost_alias \
 && apt-get -y clean \
 && chown -Rf docker:docker /var/ \
-&& chown -Rf nexus:nexus /var/ \
 && rm -rf /var/www/html \
 && echo "export APACHE_RUN_USER=docker" >> /etc/apache2/envvars \
 && echo "export APACHE_RUN_GROUP=docker" >> /etc/apache2/envvars \
 && ln -s /usr/bin/nodejs /usr/bin/node
+
+ADD .docker/ssh /home/docker/.ssh/
 
 EXPOSE 22 80 3000
 CMD ["supervisord", "-n"]

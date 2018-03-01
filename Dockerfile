@@ -9,10 +9,10 @@ RUN apt-get update && apt-get -y upgrade \
 && echo 'root:docker' | chpasswd \
 && sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
 && sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd \
-&& adduser --disabled-password --home /var/www/ --gecos "" nexus \
+&& adduser --disabled-password --gecos "" nexus \
 && echo 'nexus:nexus123' | chpasswd \
 && adduser nexus sudo \
-&& adduser --disabled-password --home /var/www/ --gecos "" docker \
+&& adduser --disabled-password --gecos "" docker \
 && echo 'docker:docker' | chpasswd \
 && adduser docker sudo \
 && echo "nexus ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers \

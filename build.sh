@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t nxswesolowski/ubuntu-apache:16.04 .
+docker build -t nxsjung/ubuntu-apache:18.04 .

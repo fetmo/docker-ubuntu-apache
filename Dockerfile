@@ -1,5 +1,5 @@
-FROM ubuntu:16.04
-MAINTAINER Rafal Wesolowski <wesolowski@nexus-netsoft.com>
+FROM ubuntu:18.04
+MAINTAINER Moritz Jung <m.jung@nexus-united.com>
 
 ADD .docker/scripts /opt/docker/scripts
 
@@ -31,14 +31,13 @@ ADD .docker/apache/vhost /etc/apache2/sites-enabled
 RUN apt-get -y --force-yes install nodejs npm \
 && npm install -g grunt-cli \
 && apt-get -y install software-properties-common \
-&& apt-get update && apt-get -y install python-software-properties \
+&& apt-get update \
 && a2enmod rewrite \
 && a2enmod ssl \
 && a2enmod vhost_alias \
 && apt-get -y clean \
 && chown -Rf www-data:www-data /var/ \
-&& rm -rf /var/www/html \
-&& ln -s /usr/bin/nodejs /usr/bin/node
+&& rm -rf /var/www/html
 
 ADD .docker/ssh /var/www/.ssh/
 
